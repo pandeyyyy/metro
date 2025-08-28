@@ -1,0 +1,16 @@
+ [
+        {
+          "name": "Ashok Park Main",
+          "lines": ["Green"]
+        },
+        {
+            "name": "Satguru Ram Singh Marg",
+            "lines": ["Green"]
+        },
+        {
+            "name": "Kirti Nagar",
+            "lines": ["Green","Blue"]
+        }
+    ]
+  
+  

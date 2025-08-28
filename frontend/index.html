@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delhi Metro Route Finder</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🚇 Delhi Metro Route Finder</h1>
+            <p>Find the fastest route between metro stations</p>
+        </header>
+
+        <div class="search-section">
+            <div class="input-group">
+                <label for="startStation">From Station:</label>
+                <input type="text" id="startStation" placeholder="Enter start station..." autocomplete="off">
+                <div id="startSuggestions" class="suggestions"></div>
+            </div>
+
+            <div class="input-group">
+                <label for="endStation">To Station:</label>
+                <input type="text" id="endStation" placeholder="Enter destination station..." autocomplete="off">
+                <div id="endSuggestions" class="suggestions"></div>
+            </div>
+
+            <button id="findRoute" class="find-btn">Find Route</button>
+            <button id="swapStations" class="swap-btn">⇅ Swap</button>
+        </div>
+
+        <div id="loading" class="loading hidden">
+            <div class="spinner"></div>
+            <p>Finding best route...</p>
+        </div>
+
+        <div id="results" class="results hidden">
+            <div class="route-summary">
+                <h3>Route Found!</h3>
+                <div class="summary-stats">
+                    <div class="stat">
+                        <span class="label">Total Time:</span>
+                        <span id="totalTime" class="value">0 min</span>
+                    </div>
+                    <div class="stat">
+                        <span class="label">Stations:</span>
+                        <span id="totalStations" class="value">0</span>
+                    </div>
+                    <div class="stat">
+                        <span class="label">Estimated Fare:</span>
+                        <span id="estimatedFare" class="value">₹0</span>
+                    </div>
+                    <div class="stat">
+                        <span class="label">Interchanges:</span>
+                        <span id="totalInterchanges" class="value">0</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="route-path">
+                <h4>Your Journey:</h4>
+                <div id="pathContainer" class="path-container"></div>
+            </div>
+        </div>
+
+        <div id="error" class="error hidden">
+            <h3>⚠️ Error</h3>
+            <p id="errorMessage">Something went wrong. Please try again.</p>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

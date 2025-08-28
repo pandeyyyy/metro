@@ -1,0 +1,32 @@
+ [
+      {
+        "name": "New Delhi",
+        "lines": ["Orange","Yellow"]
+      },
+      {
+        "name": "Shivaji Stadium",
+        "lines": ["Orange"]
+      },
+      {
+        "name": "Dhaula Kuan",
+        "lines": ["Orange","Pink"]
+      },
+      {
+        "name": "Delhi Aerocity",
+        "lines": ["Orange"]
+      },
+      {
+        "name": "IGI Airport",
+        "lines": ["Orange"]
+      },
+      {
+        "name": "Dwarka Sector 21",
+        "lines": ["Orange","Blue"]
+      },
+      {
+        "name": "Yashobhoomi Dwarka Sector - 25",
+        "lines": ["Orange"]
+      }
+    ]
+  
+  

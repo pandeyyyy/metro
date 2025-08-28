@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Metro Route Tester</title>
+</head>
+<body>
+  <h1>Metro Route Finder</h1>
+
+  <h3>Find Fastest Path</h3>
+  <form id="pathForm">
+    <label>Start Station: <input type="text" id="startStation" required></label><br><br>
+    <label>End Station: <input type="text" id="endStation" required></label><br><br>
+    <button type="submit">Get Route</button>
+  </form>
+  <pre id="pathResult"></pre>
+
+  <hr>
+
+  <h3>Get Recommendations</h3>
+  <form id="recommForm">
+    <label>Station Name: <input type="text" id="stationName" required></label><br><br>
+    <button type="submit">Get Recommendations</button>
+  </form>
+  <pre id="recommResult"></pre>
+
+  <script>
+    const backendURL = "http://localhost:8000/api/v1"; // adjust if different
+
+    // Fastest path
+    document.getElementById("pathForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const startStation = document.getElementById("startStation").value;
+      const endStation = document.getElementById("endStation").value;
+
+      const res = await fetch(backendURL + "/", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ startStation, endStation })
+      });
+      const data = await res.json();
+      document.getElementById("pathResult").textContent = JSON.stringify(data, null, 2);
+    });
+
+    // Recommendations
+    document.getElementById("recommForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const stationName = document.getElementById("stationName").value;
+
+      const res = await fetch(backendURL + "/recommend1", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ stationName })
+      });
+      const data = await res.json();
+      document.getElementById("recommResult").textContent = JSON.stringify(data, null, 2);
+    });
+  </script>
+</body>
+</html>

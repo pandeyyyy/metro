@@ -1,0 +1,86 @@
+[
+  {
+      "name": "Inderlok",
+      "lines":["green"]
+  },
+  {
+      "name": "Ashok Park Main",
+      "lines":["green"]
+  },
+  {
+      "name": "Punjabi Bagh",
+      "lines":["green"]
+  },
+  {
+      "name": "Shivaji Park",
+      "lines":["green"]
+  },
+  {
+      "name": "Madipur",
+      "lines":["green"]
+  },
+  {
+      "name": "Paschim Vihar East",
+      "lines":["green"]
+  },
+  {
+      "name": "Paschim Vihar West",
+      "lines":["green"]
+  },
+  {
+      "name": "Peera Garhi",
+      "lines":["green"]
+  },
+  {
+      "name": "Udyog Nagar",
+      "lines":["green"]
+  },
+  {
+      "name": "Surajmal Stadium",
+      "lines":["green"]
+  },
+  {
+      "name": "Nangloi",
+      "lines":["green"]
+  },
+  {
+      "name": "Nangloi Railway station",
+      "lines":["green"]
+  },
+  {
+      "name": "Rajdhani Park",
+      "lines":["green"]
+  },
+  {
+      "name": "Mundka",
+      "lines":["green"]
+  },
+  {
+      "name": "Mundka Industrial Area",
+      "lines":["green"]
+  },
+  {
+      "name": "Ghevra Metro station",
+      "lines":["green"]
+  },
+  {
+      "name": "Tikri Kalan",
+      "lines":["green"]
+  },
+  {
+      "name": "Tikri Border",
+      "lines":["green"]
+  },
+  {
+      "name": "Pandit Shree Ram Sharma",
+      "lines":["green"]
+  },
+  {
+      "name": "Bahadurgarh City",
+      "lines":["green"]
+  },
+  {
+      "name": "Brigadier Hoshiyar Singh",
+      "lines":["green"]
+  }
+]

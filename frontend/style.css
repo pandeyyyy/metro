@@ -1,0 +1,285 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    padding: 20px;
+}
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+    overflow: hidden;
+}
+
+header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    text-align: center;
+    padding: 30px;
+}
+
+header h1 {
+    font-size: 2.5em;
+    margin-bottom: 10px;
+    font-weight: 300;
+}
+
+header p {
+    font-size: 1.1em;
+    opacity: 0.9;
+}
+
+.search-section {
+    padding: 30px;
+    background: #f8f9fa;
+}
+
+.input-group {
+    margin-bottom: 25px;
+    position: relative;
+}
+
+.input-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #333;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 15px;
+    border: 2px solid #e0e0e0;
+    border-radius: 10px;
+    font-size: 16px;
+    transition: border-color 0.3s;
+}
+
+.input-group input:focus {
+    outline: none;
+    border-color: #667eea;
+}
+
+.suggestions {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: white;
+    border: 1px solid #e0e0e0;
+    border-top: none;
+    border-radius: 0 0 10px 10px;
+    max-height: 200px;
+    overflow-y: auto;
+    z-index: 1000;
+    display: none;
+}
+
+.suggestion-item {
+    padding: 12px 15px;
+    cursor: pointer;
+    border-bottom: 1px solid #f0f0f0;
+    transition: background-color 0.2s;
+}
+
+.suggestion-item:hover {
+    background-color: #f8f9fa;
+}
+
+.suggestion-item:last-child {
+    border-bottom: none;
+}
+
+.find-btn, .swap-btn {
+    padding: 15px 30px;
+    border: none;
+    border-radius: 10px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    margin-right: 10px;
+}
+
+.find-btn {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    flex: 1;
+}
+
+.swap-btn {
+    background: #f8f9fa;
+    color: #666;
+    border: 2px solid #e0e0e0;
+    min-width: 80px;
+}
+
+.find-btn:hover, .swap-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+
+.loading {
+    text-align: center;
+    padding: 40px;
+    color: #666;
+}
+
+.spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid #667eea;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin: 0 auto 20px;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.results {
+    padding: 30px;
+}
+
+.route-summary {
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 25px;
+}
+
+.route-summary h3 {
+    color: #2c3e50;
+    margin-bottom: 15px;
+    font-size: 1.3em;
+}
+
+.summary-stats {
+    display: flex;
+    gap: 30px;
+    flex-wrap: wrap;
+}
+
+.stat {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.stat .label {
+    font-size: 0.9em;
+    color: #666;
+    margin-bottom: 5px;
+}
+
+.stat .value {
+    font-size: 1.2em;
+    font-weight: bold;
+    color: #2c3e50;
+}
+
+.route-path h4 {
+    margin-bottom: 20px;
+    color: #2c3e50;
+    font-size: 1.2em;
+}
+
+.path-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.station-item {
+    display: flex;
+    align-items: center;
+    padding: 15px;
+    background: #f8f9fa;
+    border-radius: 10px;
+    border-left: 5px solid #ccc;
+}
+
+.station-item.interchange {
+    background: #fff3cd;
+    border-left-color: #ffc107;
+}
+
+.station-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    margin-right: 15px;
+    flex-shrink: 0;
+}
+
+.station-name {
+    flex: 1;
+    font-weight: 500;
+    text-transform: capitalize;
+}
+
+.station-line {
+    font-size: 0.8em;
+    color: #666;
+    background: #e9ecef;
+    padding: 4px 8px;
+    border-radius: 15px;
+}
+
+.error {
+    padding: 30px;
+    text-align: center;
+    color: #dc3545;
+}
+
+.error h3 {
+    margin-bottom: 15px;
+}
+
+.hidden {
+    display: none !important;
+}
+
+/* Metro Line Colors */
+.blue { background-color: #0052cc; }
+.bluebranch { background-color: #0052cc; }
+.yellow { background-color: #ffcc00; }
+.red { background-color: #e60012; }
+.green { background-color: #00b04f; }
+.greenbranch { background-color: #00b04f; }
+.violet { background-color: #8b00ff; }
+.pink { background-color: #ff1493; }
+.pinkbranch { background-color: #ff1493; }
+.magenta { background-color: #ff00ff; }
+.orange { background-color: #ff6600; }
+.grey { background-color: #808080; }
+
+@media (max-width: 600px) {
+    .container {
+        margin: 10px;
+        border-radius: 10px;
+    }
+    
+    .summary-stats {
+        flex-direction: column;
+        gap: 15px;
+    }
+    
+    .find-btn, .swap-btn {
+        width: 100%;
+        margin-bottom: 10px;
+        margin-right: 0;
+    }
+}

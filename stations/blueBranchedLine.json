@@ -1,0 +1,34 @@
+[
+  {
+      "name": "Yamuna Bank",
+      "lines":["blue"]
+  },
+  {
+      "name": "Laxmi Nagar",
+      "lines":["blue"]
+  },
+  {
+      "name": "Nirman Vihar",
+      "lines":["blue"]
+  },
+  {
+      "name": "Preet Vihar",
+      "lines":["blue"]
+  },
+  {
+      "name": "Karkarduma",
+      "lines":["blue"]
+  },
+  {
+      "name": "Anand Vihar",
+      "lines":["blue"]
+  },
+  {
+      "name": "Kaushambi",
+      "lines":["blue"]
+  },
+  {
+      "name": "Vaishali",
+      "lines":["blue"]
+  }
+]

@@ -27,11 +27,10 @@ app.get('/', (req,res) => {
     res.send("Hello from the backend");
 });
 
-app.use('api/v1/auth', authRoute)
+app.use('/api/v1/auth', authRoute)
 
 app.use('/api/v1/', stationRoute);
 
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
 });
-            

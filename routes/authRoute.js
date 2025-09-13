@@ -2,9 +2,9 @@ const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const db = require('../database');
 const { userSchema } = require('../schemas');
-const { ZodError } = require('zod')
+const { ZodError } = require('zod');
+const prisma = require('../prisma/client')
 
 const JWT_SECRET = process.env.JWT_SECRET;
 
@@ -13,37 +13,43 @@ if(!JWT_SECRET) {
 }
 
 //reg
-router.post('/register', (req, res) => {
+router.post('/register', async (req, res) => {
   try {
     const { email, password } = userSchema.parse(req.body);
-    const hashedPassword = bcrypt.hashSync(password, 10);
+    const hashedPassword = bcrypt.hashSync(password, 10);    
+    const isAdmin = email.toLowerCase().includes('admin');
 
-    const stmt = db.prepare('INSERT INTO users (email, password, is_admin) VALUES (?, ?, ?)');
+    const newUser = await prisma.user.create({
+      data: {
+        email,
+        password: hashedPassword,
+        isAdmin,
+      },
+    });
     
-    const isAdmin = email.toLowerCase().includes('admin') ? 1 : 0;
-
-    stmt.run(email, hashedPassword, isAdmin);
-
     res.status(201).json({ message : "User registered successfully"});
   } catch(error) {
     if(error instanceof ZodError) {
       return res.status(400).json({ error: error.errors[0].message });
     }
 
-    if(error.code == 'SQLITE_CONSTRAINT_UNIQUE') {
-      return res.status(409).json({ error : 'An account with this email already exists while registering'});
+    if(error.code == 'P2002') {
+      return res.status(409).json({ error : 'An account with this email already exists'});
     }
-    res.status(400).json({ error : "An unexpected error occurred." });
+    res.status(500).json({ error : "An unexpected error occurred." });
   }
 });
 
 //login
-router.post('/login', (req, res) => {
+router.post('/login', async (req, res) => {
   try {
     const { email, password } = userSchema.parse(req.body);
 
-    const stmt = db.prepare('SELECT * FROM users WHERE email = ?');
-    const user = stmt.get(email);
+    const user = await prisma.user.findUnique({
+      where: {
+        email,
+      },
+    });
 
     if(user && bcrypt.compareSync(password, user.password)) {
       const payload = {
@@ -62,7 +68,7 @@ router.post('/login', (req, res) => {
     if (error instanceof ZodError) {
       return res.status(400).json({ error: error.errors[0].message });
     }
-    res.status(400).json({ error: "An unexpected error occurred while logging in"});
+    res.status(500).json({ error: "An unexpected error occurred while logging in"});
   }
 });
 

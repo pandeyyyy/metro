@@ -1,0 +1,76 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  // output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// Models
+// User - auth
+model User {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  password  String
+  isAdmin   Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// Metro
+model Metro {
+  id    Int    @id @default(autoincrement())
+  name  String @unique
+  city  String
+  lines Line[]
+}
+
+// Line
+model Line {
+  id          Int             @id @default(autoincrement())
+  name        String
+  color       String
+  metro       Metro           @relation(fields: [metroId], references: [id])
+  metroId     Int
+  stations    StationToLine[]
+  connections Connection[]
+}
+
+// Station
+model Station {
+  id              Int             @id @default(autoincrement())
+  name            String
+  lines           StationToLine[] // one to many
+  connectionsFrom Connection[]    @relation("FromStation")
+  connectionsTo   Connection[]    @relation("ToStation")
+}
+
+// Station to line - join table for many-to-many rels
+model StationToLine {
+  station   Station @relation(fields: [stationId], references: [id])
+  stationId Int
+  line      Line    @relation(fields: [lineId], references: [id])
+  lineId    Int
+
+  @@id([stationId, lineId]) // composite key
+}
+
+//  connection - graph edges
+model Connection {
+  id            Int     @id @default(autoincrement())
+  fromStation   Station @relation("FromStation", fields: [fromStationId], references: [id])
+  fromStationId Int
+  toStation     Station @relation("ToStation", fields: [toStationId], references: [id])
+  toStationId   Int
+  line          Line    @relation(fields: [lineId], references: [id])
+  lineId        Int
+  timeInMinutes Int
+}

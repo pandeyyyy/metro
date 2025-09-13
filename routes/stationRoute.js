@@ -1,56 +1,72 @@
-const express = require("express");
-const router = express.Router()
-const {findRecomm}= require('../recommend');
-const {findFastestPath}=require('../fastestPath');
+const express = require('express');
+const router = express.Router();
+const prisma = require('../prisma/client');
+const { calculateRoute } = require('../fastestPath');
+const { getTrieForMetro } = require('../makeTrie');
+const { getRecommendations } = require('../recommend');
 
-router.post('/',(req,res)=>{
+// GET /api/v1/metros
+router.get('/metros', async (req, res) => {
     try {
-            const { startStation, endStation } = req.body;
-            
-            const adjacencyList = req.adjacencyList;
-            const stations = req.stations;
-            var {finalPath,totalTime,interChanges,estimatedFare} = findFastestPath(adjacencyList, startStation, endStation,stations);
-           
-            res.json({finalPath,totalTime,interChanges,estimatedFare});
+        const metros = await prisma.metro.findMany({
+            orderBy: {
+                name: 'asc'
+            }
+        });
+        res.json(metros);
     } catch (error) {
-        res.status(500).json({ error: error.message });
+        console.error('Failed to fetch metros:', error);
+        res.status(500).json({ error: 'Failed to fetch metro systems' });
     }
 });
 
-router.post('/recommend1',(req,res)=>{
+// GET /api/v1/metros/:metroId/stations - autocomplete
+router.get('/metros/:metroId/stations', async (req, res) => {
+    const metroId = parseInt(req.params.metroId);
+    const prefix = req.query.prefix || '';
+
+    if (isNaN(metroId)) {
+        return res.status(400).json({ error: 'Invalid Metro ID' });
+    }
+    if (!prefix) {
+        return res.json([]);
+    }
+
     try {
-            const { stationName } = req.body;
-            
-            var sta1=stationName.trim().toLowerCase();
-            
-            const root = req.root;
-           
-            var {recommendations} = findRecomm(root, sta1);
-            var recommendations1=recommendations;
+        const trie = await getTrieForMetro(metroId);
+        
+        const suggestions = getRecommendations(trie, prefix);
 
-            res.json({recommendations1});
-
+        res.json(suggestions.slice(0, 10));
     } catch (error) {
-        res.status(500).json({ error: error.message });
+        console.error('Failed to get station recommendations:', error);
+        res.status(500).json({ error: 'Failed to get station recommendations' });
     }
 });
 
-router.post('/recommend2',(req,res)=>{
+// POST /api/v1/metros/:metroId/route - fastest route
+router.post('/metros/:metroId/route', async (req, res) => {
+    const metroId = parseInt(req.params.metroId);
+    const { startStation, endStation } = req.body;
+
+    if (isNaN(metroId)) {
+        return res.status(400).json({ error: 'Invalid Metro ID' });
+    }
+    if (!startStation || !endStation) {
+        return res.status(400).json({ error: 'Start and end stations are required' });
+    }
+
     try {
-            const { stationName } = req.body;
-           
-            var sta1=stationName.trim().toLowerCase();
+        const result = await calculateRoute(metroId, startStation, endStation);
 
-            const root = req.root;
-           
-            var {recommendations} = findRecomm(root, sta1);
-      
-            var recommendations2=recommendations;
-
-            res.json({recommendations2});
-
+        if (result.message) {
+            return res.status(404).json({ error: result.message });
+        }
+        
+        res.json(result);
     } catch (error) {
-        res.status(500).json({ error: error.message });
+        console.error('Failed to calculate route:', error);
+        res.status(500).json({ error: 'Failed to calculate route' });
     }
 });
 

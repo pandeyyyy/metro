@@ -1,3 +1,5 @@
+const { getGraphForMetro } = require('./makeGraph')
+
 class PriorityQueue {
     constructor() {
       this.collection = [];
@@ -187,4 +189,12 @@ function calculateFare(numStations) {
     return fare;
 }
 
-module.exports = { findFastestPath };
+async function calculateRoute(metroId, startStation, endStation) {
+  
+  const graphData = await getGraphForMetro(metroId);
+
+  return findFastestPath(graphData.adj, startStation, endStation, graphData.stations)
+}
+
+
+module.exports = { calculateRoute };

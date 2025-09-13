@@ -1,84 +1,57 @@
-class TrieNode {
-    constructor() {
-        this.children = {};
-        this.isEndOfWord = false;
-    }
-}
+const prisma = require('./prisma/client');
+const { trieCache } = require('./cache');
 
+// Your original, efficient Trie implementation
 class Trie {
     constructor() {
-        this.root = new TrieNode();
+        this.root = {};
     }
-
     insert(word) {
-        if (!word) return; 
         let node = this.root;
-        for (let char of word.toLowerCase()) {
-            if (!node.children[char]) {
-                node.children[char] = new TrieNode();
+        for (let i = 0; i < word.length; i++) {
+            if (!node[word[i]]) {
+                node[word[i]] = {};
             }
-            node = node.children[char];
+            node = node[word[i]];
         }
-        node.isEndOfWord = true;
-    }
-
-    findRecommendation(word) {
-        let node = this.root;
-        const recommendations = [];
-
-        for (let char of word.toLowerCase()) {
-            // console.log(typeof node.children);
-            if (!node.children[char]) {
-                return recommendations; 
-            }
-            node = node.children[char];
-        }
-
-        this._findWords(node, word, recommendations);
-        // console.log("parent function",recommendations);
-        return recommendations.slice(0,5); 
-    }
-
-    _findWords(node, prefix, recommendations) {
-        // console.log("inside findWords");
-        if (node.isEndOfWord) {
-            recommendations.push(prefix);
-            // console.log(recommendations);
-        }
-        for (let char in node.children) {
-            this._findWords(node.children[char], prefix + char, recommendations);
-        }
+        node.isEnd = true;
     }
 }
 
-const root = new Trie();
+async function getTrieForMetro(metroId) {
+    const cacheKey = `trie:${metroId}`;
+    let trie = trieCache.get(cacheKey);
 
+    if (!trie) {
+        console.log(`CACHE MISS: Building Trie for Metro ID ${metroId}`);
+        
+        const stations = await prisma.station.findMany({
+            where: {
+                lines: {
+                    some: {
+                        line: {
+                            metroId: metroId,
+                        },
+                    },
+                },
+            },
+            select: {
+                name: true,
+            },
+        });
 
+        trie = new Trie();
+        for (const station of stations) {
+            trie.insert(station.name.toLowerCase());
+        }
 
-function insertStations(stationNames) {
-    for (let name of stationNames) {
-        root.insert(name);
+        trieCache.set(cacheKey, trie);
+    } else {
+        console.log(`CACHE HIT: Using cached Trie for Metro ID ${metroId}`);
     }
+
+    return trie;
 }
 
-const stations = {
-    blueLine: require('./stations/blueLine.json'),
-    blueBranchedLine: require('./stations/blueBranchedLine.json'),
-    magentaLine: require('./stations/magentaLine.json'),
-    yellowLine: require('./stations/yellowLine.json'),
-    violetLine: require('./stations/violetLine.json'),
-    redLine: require('./stations/redLine.json'),
-    greenLine: require('./stations/greenLine.json'),
-    greenBranchedLine: require('./stations/greenBranchedLine.json'),
-    pinkLine: require('./stations/pinkLine.json'),
-    pinkBranchedLine: require('./stations/pinkBranchedLine.json'),
-    orangeLine: require('./stations/orangeLine.json'),
-    greyLine: require('./stations/greyLine.json')
-};
+module.exports = { getTrieForMetro, Trie };
 
-
-for (let line in stations) {
-    insertStations(stations[line].map(station => station.name.toLowerCase()));
-}
-
-module.exports = root;

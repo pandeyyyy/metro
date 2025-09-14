@@ -196,5 +196,4 @@ async function calculateRoute(metroId, startStation, endStation) {
   return findFastestPath(graphData.adj, startStation, endStation, graphData.stations)
 }
 
-
 module.exports = { calculateRoute };

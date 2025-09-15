@@ -13,7 +13,7 @@ const PORT = process.env.PORT || 8000;
 // app.use(express.static('public'));
 app.use(express.json());
 app.use(cors({
-  origin: ['http://localhost:3000', 'http://localhost:3001'],
+  origin: ['http://localhost:3000', 'http://localhost:3001', 'metro-rf.vercel.app'],
   credentials: true
 }));
 

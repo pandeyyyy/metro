@@ -13,7 +13,7 @@ const PORT = process.env.PORT || 8000;
 // app.use(express.static('public'));
 app.use(express.json());
 app.use(cors({
-  origin: ['http://localhost:3000', 'http://localhost:3001', 'mhttps://metro-rf.vercel.app'],
+  origin: ['http://localhost:3000', 'http://localhost:3001', 'https://metro-rf.vercel.app', 'https://metro-rf-sks-projects-c142d860.vercel.app'],
   credentials: true
 }));
 
@@ -23,6 +23,11 @@ app.use(cors({
 //     req.root = root;
 //     next();
 // });
+
+app.use((req, res, next) => {
+  console.log("Origin:", req.headers.origin);
+  next();
+});
 
 app.get('/', (req, res) => {
     res.send("Hello from the backend");
